@@ -1,0 +1,42 @@
+body {
+    background-color: gray;
+    color: white;
+    text-align: center;
+}
+
+table {
+    border: 5px solid black;
+    border-collapse: collapse;
+    margin: auto;
+}
+
+.board-container {
+    padding: 15px;
+    margin: auto;
+}
+
+.cell {
+    background-color: rgb(12, 12, 235);
+    /* Default background color */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    border: 5px, solid, black;
+    font-size: 1.5em;
+    width: 2em;
+    height: 2em;
+}
+
+.cell.clicked {
+    background-color: rgb(97, 97, 235);
+    /* Color when clicked */
+    transform: scale(1.1);
+    /* Slightly increase the size of the cell */
+}
+
+.cell.clicked:active {
+    transform: scale(1);
+    /* Reset scale when the cell is active (clicked) */
+}
+
+.hide {
+    display: none;
+}
