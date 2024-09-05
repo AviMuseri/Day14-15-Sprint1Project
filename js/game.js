@@ -42,10 +42,9 @@ function onInit() {
     gGame.secsPassed = 0
     gGame.lives = 3
     gMinesLocation = []
-    updateSmileyButton()
     updateLives(true)
-    resetScore()
     updateSmileyButton('Normal')
+    resetScore()
     gBoard = buildBoard(gBoard)
     renderBoard(gBoard)
 }
@@ -53,6 +52,7 @@ function onInit() {
 function createCellObject() {
 
     const cell = {
+
         minesAroundCount: 0,
         isShown: false,
         isMine: false,
@@ -64,7 +64,7 @@ function createCellObject() {
 
 function createMines(board, MinesAmount) {
 
-    var location = {}
+    var location
 
     for (var i = 0; i < MinesAmount; i++) {
         location = getRandLocation()
@@ -106,14 +106,19 @@ function renderBoard(board) {
             const className = `cell cell-${i}-${j}`
 
             if (currCell.isMine) {
-                strHTML += `<td oncontextmenu="onCellMarked(this, ${i} , ${j})" 
+                strHTML += `
+                <td oncontextmenu="onCellMarked(this, ${i} , ${j})" 
                 onclick="onCellClicked(this, ${i} , ${j})" class="${className}">
-                ${MINES}
+                    <span class = "hide">
+                        ${MINES}
+                    </span>
                 </td>`
             } else {
-                strHTML += `<td oncontextmenu="onCellMarked(this, ${i} , ${j})" 
-                onclick="onCellClicked(this, ${i} , ${j})" class="${className}">
-                ${currCell.minesAroundCount}
+                strHTML += `
+                <td oncontextmenu="onCellMarked(this, ${i} , ${j})" onclick="onCellClicked(this, ${i} , ${j})" class="${className}">
+                    <span class = "hide">
+                        ${currCell.minesAroundCount}
+                    </span>
                 </td>`
             }
         }
@@ -128,27 +133,38 @@ function renderBoard(board) {
 }
 
 function cellClicked(i, j) {
-    console.log('elCell.classList')
 
     const elCell = document.querySelector(`.cell-${i}-${j}`)
     elCell.classList.add('clicked')
 
+    var elCellShow = document.querySelector(`.cell-${i}-${j} > span`)
+    if (elCellShow.classList.contains('hide')) {
+
+        elCellShow.classList.remove('hide')
+
+    }
+
 }
 
 function onCellClicked(elCell, i, j) {
+
     gFirstClicked++
-    //TO-DO !!!:gGame.secsPassed = startStopwatch()
-    var currCell = gBoard[i][j]
+
     if (gFirstClicked === 1) {
+
         gMinesLocation = getAllIndex(i, j)
         createMines(gBoard, gLevel.MINES)
         setMinesNegsCount(gBoard)
         renderBoard(gBoard)
-    }
 
+    }
+    if (!gGame.isOn) return
+
+    //TO-DO !!!:gGame.secsPassed = startStopwatch()
+    var currCell = gBoard[i][j]
 
     if (currCell.isShown) return
-    if (elCell.innerHTML === FLAG) return
+    if (currCell.isMarked) return
 
     if (currCell.isMine) {
 
@@ -166,6 +182,7 @@ function onCellClicked(elCell, i, j) {
         showNegs(gBoard)
         // update dom 
         updateScore()
+
 
 
     } else if (currCell.minesAroundCount > 0) {
@@ -189,19 +206,41 @@ function onCellClicked(elCell, i, j) {
 function onCellMarked(elCell, i, j) {
 
     displayRightClick()
+    var currCell = gBoard[i][j]
 
-    if (elCell.innerHTML === FLAG) {
+    if (currCell.isShown) return
+    if (isVictory()) {
+        updateSmileyButton("Win")
+        gGame.isOn = false
+    }
 
+    if (currCell.isMarked) {
+        currCell.isMarked = false
         removeFlag(elCell, i, j)
-    } else {
+        gGame.markedCount--
+    } else if (currCell.isMine) {
+        currCell.isMarked = true
+        elCell.innerHTML = FLAG
+        gGame.markedCount++
 
+    } else {
+        currCell.isMarked = true
         elCell.innerHTML = FLAG
         gGame.markedCount++
     }
 
-    if (isVictory()) {
-        updateSmileyButton("Win")
-        gGame.isOn = false
+
+}
+function removeFlag(elCell, i, j) {
+
+    if (gBoard[i][j].isMine) {
+        elCell.innerHTML = MINES
+
+    } else {
+
+        console.log(gBoard[i][j].minesAroundCount)
+        elCell.innerText = ''
+
     }
 
 }
@@ -214,23 +253,9 @@ function isVictory() {
 
 function gameOver() {
     updateSmileyButton('Lose')
+    gGame.isOn = false
 }
 
-function removeFlag(elCell, i, j) {
-
-    if (gBoard[i][j].isMine) {
-
-        elCell.innerHTML = MINES
-        gGame.markedCount--
-
-    } else {
-
-        console.log(gBoard[i][j].minesAroundCount)
-        elCell.innerHTML = gBoard[i][j].minesAroundCount
-
-    }
-
-}
 
 function restart() {
     gFirstClicked = 0
@@ -247,20 +272,21 @@ function updateScore() {
 }
 
 function updateLives(isStarted) {
+
     if (!isStarted) {
         gGame.lives--
 
     }
+
     var score = document.querySelector('.lives')
     score.innerText = gGame.lives
 }
 
 function resetScore() {
+
     gGame.shownCount = 0
     var score = document.querySelector('.finalScore')
     score.innerText = gGame.shownCount
-
-
 }
 
 function levelPick(elBtnLevel = document.querySelector(".default")) {
@@ -282,7 +308,6 @@ function levelPick(elBtnLevel = document.querySelector(".default")) {
     }
 
     restart()
-
 }
 
 function updateSmileyButton(smileyStr) {
