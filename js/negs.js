@@ -9,7 +9,9 @@ function setMinesNegsCount(board) {
             var currCell = board[i][j]
 
             if (!currCell.isMine) {
+
                 board[i][j].minesAroundCount = countNegsMines(i, j, board)
+
             }
         }
     }
@@ -32,10 +34,13 @@ function countNegsMines(cellI, cellJ, board) {
             if (j < 0 || j >= board[i].length) continue
 
             if (board[i][j].isMine) minesAroundCount++
+
         }
+
     }
 
     return minesAroundCount
+
 }
 
 
@@ -62,9 +67,13 @@ function findNegs(board, cellI, cellJ) {
 
                 // update dom
                 updateScore()
+
             }
+
         }
+
     }
+
 }
 
 
@@ -79,7 +88,9 @@ function showNegs(board) {
             if (currCell.isShown) {
                 cellClicked(i, j)
             }
+
         }
+
     }
 
 }

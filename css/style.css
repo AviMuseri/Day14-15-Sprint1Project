@@ -30,7 +30,6 @@ button {
 
 .cell {
     background-color: rgb(12, 12, 235);
-    /* Default background color */
     transition: background-color 0.3s ease, transform 0.3s ease;
     border: 5px, solid, black;
     font-size: 1.5em;
@@ -40,14 +39,14 @@ button {
 
 .cell.clicked {
     background-color: rgb(97, 97, 235);
-    /* Color when clicked */
+
     transform: scale(1.1);
-    /* Slightly increase the size of the cell */
+
 }
 
 .cell.clicked:active {
     transform: scale(1);
-    /* Reset scale when the cell is active (clicked) */
+
 }
 
 .restart-button {

@@ -16,8 +16,6 @@ const gExpert = {
 }
 
 const MINES = '💣'
-const countSHOWN = 14
-const countMarked = 2
 const FLAG = '🚩'
 
 //modal :
@@ -27,8 +25,10 @@ const gGame = {
     markedCount: 0,
     secsPassed: 0
 }
+
 var gLevel = gBginner
 var gBoard
+var gMinesLocation
 
 
 function onInit() {
@@ -37,36 +37,59 @@ function onInit() {
     gGame.shownCount = 0
     gGame.markedCount = 0
     gGame.secsPassed = 0
+    gMinesLocation = []
     gBoard = buildBoard(gBoard)
     setMinesNegsCount(gBoard)
     renderBoard(gBoard)
-
 }
 
 function createCellObject() {
+
     const cell = {
         minesAroundCount: 0,
         isShown: false,
         isMine: false,
         isMarked: false
     }
+
     return cell
 }
 
+function createMines(board, MinesAmount) {
+
+    var location = {}
+
+    for (var i = 0; i < MinesAmount; i++) {
+        location = getRandLocation()
+        board[location[0]][location[1]].isMine = MINES
+    }
+
+}
+
+
 function buildBoard(board) {
+
     var board = []
-    console.log(gLevel.SIZE)
+
     for (var i = 0; i < gLevel.SIZE; i++) {
+
         board[i] = []
+
         for (var j = 0; j < gLevel.SIZE; j++) {
+
             board[i][j] = createCellObject()
+
         }
     }
+
+    gMinesLocation = getAllIndex()
     createMines(board, gLevel.MINES)
+
     return board
 }
 
 function renderBoard(board) {
+
     var strHTML = ''
 
     for (var i = 0; i < board.length; i++) {
@@ -97,19 +120,24 @@ function renderBoard(board) {
 
     const elBoard = document.querySelector('.board')
     elBoard.innerHTML = strHTML
+
 }
 
 function cellClicked(i, j) {
+
     const elCell = document.querySelector(`.cell-${i}-${j}`)
     elCell.classList.add('clicked')
 
 }
 
 function onCellClicked(elCell, i, j) {
+
     //TO-DO !!!:gGame.secsPassed = startStopwatch()
     var currCell = gBoard[i][j]
+
     if (currCell.isShown) return
     if (elCell.innerHTML === FLAG) return
+
     if (currCell.isMine) {
 
         cellClicked(i, j)
@@ -142,7 +170,9 @@ function onCellClicked(elCell, i, j) {
 }
 
 function onCellMarked(elCell, i, j) {
+
     displayRightClick()
+
     if (elCell.innerHTML === FLAG) {
 
         removeFlag(elCell, i, j)
@@ -151,6 +181,7 @@ function onCellMarked(elCell, i, j) {
         elCell.innerHTML = FLAG
         gGame.markedCount++
     }
+
     if (isVictory()) {
 
         console.log("Victory")
@@ -166,6 +197,7 @@ function isVictory() {
 }
 
 function gameOver() {
+
     alert("Game over!!")
     restart()
 }
@@ -176,65 +208,48 @@ function removeFlag(elCell, i, j) {
 
         elCell.innerHTML = MINES
         gGame.markedCount--
+
     } else {
 
         console.log(gBoard[i][j].minesAroundCount)
         elCell.innerHTML = gBoard[i][j].minesAroundCount
+
     }
 
 }
 
-function randomMinesLocation() {
-    var locationExist = []
-    const location = {
-        i: getRandomIntInclusive(0, gLevel.SIZE - 1),
-        j: getRandomIntInclusive(0, gLevel.SIZE - 1)
-    }
-    locationExist.push(location)
-
-
-    return location
-}
-
-function createMines(board, MinesAmount) {
-    var location = {}
-    for (var i = 0; i < MinesAmount; i++) {
-        location = randomMinesLocation()
-        if (board[location.i][location.j].isMine) {
-            location = randomMinesLocation()
-        } else {
-            board[location.i][location.j].isMine = MINES
-        }
-    }
-}
 function restart() {
+
     onInit()
+
 }
 
 function updateScore() {
+
     gGame.shownCount++
+
     var score = document.querySelector('.finalScore')
     score.innerText = gGame.shownCount
+
 }
 
 function levelPick(elBtnLevel = document.querySelector(".default")) {
+
     switch (elBtnLevel.innerHTML) {
+
         case 'beginner':
             gLevel = gBginner
-            console.log(gLevel)
             break;
 
         case 'Medium':
             gLevel = gMedium
-            console.log(gLevel)
             break;
+
         case 'Expert':
             gLevel = gExpert
-            console.log(gLevel)
             break;
 
     }
 
     onInit()
-    return gLevel
 }

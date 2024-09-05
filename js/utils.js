@@ -7,23 +7,38 @@ function displayRightClick() {
     board.addEventListener('contextmenu', function (event) {
         event.preventDefault()
     })
-}
 
+}
 function getRandomIntInclusive(min, max) {
-    const minCeiled = Math.ceil(min);
-    const maxFloored = Math.floor(max);
-    return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // The maximum is inclusive and the minimum is inclusive
-}
-function getRandomUniqueNumbers(range, count) {
-    // Create an array with the range of numbers
-    let numbers = Array.from({ length: range }, (v, k) => k + 1); // [1, 2, 3, ..., range]
 
-    // Shuffle the array using Fisher-Yates algorithm
-    for (let i = numbers.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+    const minCeiled = Math.ceil(min)
+    const maxFloored = Math.floor(max)
+
+    return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled)
+
+}
+
+function getAllIndex() {
+
+    for (var i = 0; i < gLevel.SIZE; i++) {
+
+        for (var j = 0; j < gLevel.SIZE; j++) {
+
+            gMinesLocation.push([i, j])
+
+        }
+
     }
-
-    // Return the first 'count' numbers from the shuffled array
-    return numbers.slice(0, count);
+    return gMinesLocation
 }
+
+function getRandLocation() {
+
+    var randomIdx = getRandomIntInclusive(0, gMinesLocation.length - 1)
+    var location = gMinesLocation[randomIdx]
+
+    gMinesLocation.splice(randomIdx, 1)
+
+    return location
+}
+
