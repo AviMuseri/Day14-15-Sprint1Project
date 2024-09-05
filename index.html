@@ -13,19 +13,24 @@
     <div class="responsive-div">
         <div class="control-panel">
             <h2>Your Score: <span class="finalScore">0</span></h2>
-            <button class="restart-button" onclick="restart()">😊</button>
+            <button class="restart-button" onclick="restart()">😀</button>
             <div class="level-panel">
-                <button class="defoult" onclick="levelPick(this)">beginner</button>
-                <button onclick="levelPick(this)">Medium</button>
-                <button onclick="levelPick(this)">Expert</button>
+                <button class="level" onclick="levelPick(this)">Beginner</button>
+                <button class="level" onclick="levelPick(this)">Medium</button>
+                <button class="level" onclick="levelPick(this)">Expert</button>
 
             </div>
+
         </div>
         <table class="board-container">
             <tbody class=" board">
             </tbody>
 
         </table>
+        <div class="live">
+            <h2>Lives Left: <span class="lives">0</span></h2>
+
+        </div>
     </div>
 
     <script src="js/game.js"></script>

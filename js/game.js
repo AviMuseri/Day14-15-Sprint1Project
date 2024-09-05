@@ -14,6 +14,7 @@ const gExpert = {
     SIZE: 12,
     MINES: 32
 }
+/////////////////////////////////////////////////////////////
 
 const MINES = '💣'
 const FLAG = '🚩'
@@ -23,12 +24,14 @@ const gGame = {
     isOn: false,
     shownCount: 0,
     markedCount: 0,
-    secsPassed: 0
+    secsPassed: 0, // set stopwatch
+    lives: 0
 }
 
 var gLevel = gBginner
 var gBoard
 var gMinesLocation
+var gFirstClicked = 0
 
 
 function onInit() {
@@ -37,9 +40,13 @@ function onInit() {
     gGame.shownCount = 0
     gGame.markedCount = 0
     gGame.secsPassed = 0
+    gGame.lives = 3
     gMinesLocation = []
+    updateSmileyButton()
+    updateLives(true)
+    resetScore()
+    updateSmileyButton('Normal')
     gBoard = buildBoard(gBoard)
-    setMinesNegsCount(gBoard)
     renderBoard(gBoard)
 }
 
@@ -61,7 +68,7 @@ function createMines(board, MinesAmount) {
 
     for (var i = 0; i < MinesAmount; i++) {
         location = getRandLocation()
-        board[location[0]][location[1]].isMine = MINES
+        board[location[0]][location[1]].isMine = true
     }
 
 }
@@ -81,9 +88,6 @@ function buildBoard(board) {
 
         }
     }
-
-    gMinesLocation = getAllIndex()
-    createMines(board, gLevel.MINES)
 
     return board
 }
@@ -124,6 +128,7 @@ function renderBoard(board) {
 }
 
 function cellClicked(i, j) {
+    console.log('elCell.classList')
 
     const elCell = document.querySelector(`.cell-${i}-${j}`)
     elCell.classList.add('clicked')
@@ -131,17 +136,28 @@ function cellClicked(i, j) {
 }
 
 function onCellClicked(elCell, i, j) {
-
+    gFirstClicked++
     //TO-DO !!!:gGame.secsPassed = startStopwatch()
     var currCell = gBoard[i][j]
+    if (gFirstClicked === 1) {
+        gMinesLocation = getAllIndex(i, j)
+        createMines(gBoard, gLevel.MINES)
+        setMinesNegsCount(gBoard)
+        renderBoard(gBoard)
+    }
+
 
     if (currCell.isShown) return
     if (elCell.innerHTML === FLAG) return
 
     if (currCell.isMine) {
 
+        updateLives()
         cellClicked(i, j)
-        gameOver()
+        if (gGame.lives === 0) {
+            gameOver()
+        }
+
     } else if (currCell.minesAroundCount === 0) {
         // update model 
         currCell.isShown = true
@@ -163,7 +179,8 @@ function onCellClicked(elCell, i, j) {
     }
 
     if (isVictory()) {
-        console.log("Victory")
+        updateSmileyButton("Win")
+        gGame.isOn = false
     }
 
 
@@ -183,8 +200,7 @@ function onCellMarked(elCell, i, j) {
     }
 
     if (isVictory()) {
-
-        console.log("Victory")
+        updateSmileyButton("Win")
         gGame.isOn = false
     }
 
@@ -197,9 +213,7 @@ function isVictory() {
 }
 
 function gameOver() {
-
-    alert("Game over!!")
-    restart()
+    updateSmileyButton('Lose')
 }
 
 function removeFlag(elCell, i, j) {
@@ -219,9 +233,8 @@ function removeFlag(elCell, i, j) {
 }
 
 function restart() {
-
+    gFirstClicked = 0
     onInit()
-
 }
 
 function updateScore() {
@@ -233,11 +246,28 @@ function updateScore() {
 
 }
 
+function updateLives(isStarted) {
+    if (!isStarted) {
+        gGame.lives--
+
+    }
+    var score = document.querySelector('.lives')
+    score.innerText = gGame.lives
+}
+
+function resetScore() {
+    gGame.shownCount = 0
+    var score = document.querySelector('.finalScore')
+    score.innerText = gGame.shownCount
+
+
+}
+
 function levelPick(elBtnLevel = document.querySelector(".default")) {
 
     switch (elBtnLevel.innerHTML) {
 
-        case 'beginner':
+        case 'Beginner':
             gLevel = gBginner
             break;
 
@@ -251,5 +281,29 @@ function levelPick(elBtnLevel = document.querySelector(".default")) {
 
     }
 
-    onInit()
+    restart()
+
+}
+
+function updateSmileyButton(smileyStr) {
+
+    var smiley = ''
+    switch (smileyStr) {
+
+        case 'Win':
+            smiley = '😎'
+            break;
+
+        case 'Lose':
+            smiley = '🤯'
+            break;
+
+        case 'Normal':
+            smiley = '😀'
+            break;
+
+    }
+
+    var elBtn = document.querySelector(".restart-button")
+    elBtn.innerHTML = smiley
 }

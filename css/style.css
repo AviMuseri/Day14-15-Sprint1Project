@@ -49,7 +49,16 @@ button {
 
 }
 
+.level {
+    padding: 10px;
+    background-color: rgb(12, 12, 235);
+    color: white;
+}
+
 .restart-button {
+    width: 50px;
+    height: 50px;
+    font-size: 25px;
     background-color: blue;
     margin: 10px;
 }
@@ -69,6 +78,14 @@ button {
 
 }
 
+.live {
+    padding-top: 15px;
+    margin: auto;
+    border: 5px, solid, black;
+    border-top: 0px;
+}
+
 .hide {
+
     display: none;
 }

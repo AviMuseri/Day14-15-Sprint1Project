@@ -18,11 +18,12 @@ function getRandomIntInclusive(min, max) {
 
 }
 
-function getAllIndex() {
+function getAllIndex(currI, currJ) {
 
     for (var i = 0; i < gLevel.SIZE; i++) {
 
         for (var j = 0; j < gLevel.SIZE; j++) {
+            if (i === currI && j === currJ) continue
 
             gMinesLocation.push([i, j])
 
