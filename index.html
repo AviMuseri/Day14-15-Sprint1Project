@@ -4,17 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>💣 Mine Sweeper 💣</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body onload="onInit()">
-    <table class="board-container">
-        <tbody class=" board">
+    <h1>💣 Mine Sweeper 💣</h1>
+    <div class="responsive-div">
+        <div class="control-panel">
+            <h2>Your Score: <span class="finalScore">0</span></h2>
+            <button class="restart-button" onclick="restart()">😊</button>
+            <div class="level-panel">
+                <button class="defoult" onclick="levelPick(this)">beginner</button>
+                <button onclick="levelPick(this)">Medium</button>
+                <button onclick="levelPick(this)">Expert</button>
 
-        </tbody>
+            </div>
+        </div>
+        <table class="board-container">
+            <tbody class=" board">
 
-    </table>
+            </tbody>
+
+        </table>
+    </div>
+
     <script src="js/game.js"></script>
     <script src="js/negs.js"></script>
     <script src="js/utils.js"></script>

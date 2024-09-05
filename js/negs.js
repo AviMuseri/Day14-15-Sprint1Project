@@ -57,9 +57,11 @@ function findNegs(board, cellI, cellJ) {
                 if (currCell.isShown) {
                     gGame.shownCount--
                 }
+                // update model
                 board[i][j].isShown = true
-                console.log(gGame.shownCount)
-                gGame.shownCount++
+
+                // update dom
+                updateScore()
             }
         }
     }
@@ -75,7 +77,7 @@ function showNegs(board) {
             var currCell = board[i][j]
 
             if (currCell.isShown) {
-                renderCell(i, j)
+                cellClicked(i, j)
             }
         }
     }

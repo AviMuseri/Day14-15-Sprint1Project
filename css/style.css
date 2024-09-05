@@ -4,15 +4,28 @@ body {
     text-align: center;
 }
 
+h1 {
+    color: black;
+}
+
 table {
     border: 5px solid black;
+    border-top: 10px;
     border-collapse: collapse;
     margin: auto;
 }
 
 .board-container {
-    padding: 15px;
+    width: 100%;
+    padding: 10px;
     margin: auto;
+
+
+
+}
+
+button {
+    margin: 15px;
 }
 
 .cell {
@@ -35,6 +48,26 @@ table {
 .cell.clicked:active {
     transform: scale(1);
     /* Reset scale when the cell is active (clicked) */
+}
+
+.restart-button {
+    background-color: blue;
+    margin: 10px;
+}
+
+.control-panel {
+    margin: auto;
+    border: 5px, solid, black;
+    border-bottom: 0px;
+
+}
+
+.responsive-div {
+    display: inline-block;
+    background-color: blue;
+    margin: auto;
+
+
 }
 
 .hide {
