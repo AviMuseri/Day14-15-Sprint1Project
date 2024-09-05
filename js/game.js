@@ -209,10 +209,6 @@ function onCellMarked(elCell, i, j) {
     var currCell = gBoard[i][j]
 
     if (currCell.isShown) return
-    if (isVictory()) {
-        updateSmileyButton("Win")
-        gGame.isOn = false
-    }
 
     if (currCell.isMarked) {
         currCell.isMarked = false
@@ -230,6 +226,10 @@ function onCellMarked(elCell, i, j) {
     }
 
 
+    if (isVictory()) {
+        updateSmileyButton("Win")
+        gGame.isOn = false
+    }
 }
 function removeFlag(elCell, i, j) {
 
@@ -289,7 +289,7 @@ function resetScore() {
     score.innerText = gGame.shownCount
 }
 
-function levelPick(elBtnLevel = document.querySelector(".default")) {
+function levelPick(elBtnLevel) {
 
     switch (elBtnLevel.innerHTML) {
 
