@@ -234,6 +234,7 @@ function levelPick(elBtnLevel = document.querySelector(".default")) {
             break;
 
     }
+
     onInit()
     return gLevel
 }
